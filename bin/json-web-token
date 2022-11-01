@@ -1,0 +1,25 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+require __DIR__ . '/../vendor/autoload.php';
+
+$header = [
+    'alg' => 'HS256',
+    'typ' => 'JWT'
+];
+
+$payload = [
+    'sub' => '1234567890',
+    'name' => 'John Doe',
+//    'admin' => true,
+    'iat' => 1516239022
+];
+
+$jwt = new \JsonWebToken\JWT();
+$token = $jwt->encode($header, $payload, 'your-256-bit-secret');
+
+echo $token;
+
+echo PHP_EOL;
