@@ -11,7 +11,6 @@ use JsonWebToken\Entity\EncodedToken;
 use JsonWebToken\Enum\ClaimName;
 use JsonWebToken\Exception\AlgorithmNotSupported;
 use JsonWebToken\Exception\HeaderNotFoundException;
-use JsonWebToken\Exception\ValidationFailedException;
 use JsonWebToken\Exception\ValidatorNotFound;
 use JsonWebToken\Mapping\DecoderMapping;
 use JsonWebToken\Mapping\EncoderMapping;
@@ -62,7 +61,6 @@ final class JWT
     /**
      * @throws AlgorithmNotSupported
      * @throws HeaderNotFoundException
-     * @throws ValidationFailedException
      * @throws ValidatorNotFound
      */
     public function decode(string $token, string $secret): DecodedToken
@@ -85,7 +83,7 @@ final class JWT
         foreach (ClaimName::cases() as $claimName) {
             if (array_key_exists($claimName->value, $decodedToken->getPayload())) {
                 if (! $this->validate($decodedToken, $claimName)) {
-                    throw ValidationFailedException::forClaim($claimName->value);
+                    $decodedToken->setValid(false);
                 }
             }
         }
@@ -100,6 +98,10 @@ final class JWT
     {
         $validatorClass = $this->validatorMapping->get($claimName->value);
         $claimValue = $decodedToken->getPayload()[$claimName->value] ?? null;
+
+        if ($claimValue === null) {
+            return false;
+        }
 
         /** @var Validator $validator */
         $validator = new $validatorClass($claimValue);
