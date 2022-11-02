@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace JsonWebToken\Decoder\HMAC;
 
-use JsonWebToken\Decoder\Decoder;
 use JsonWebToken\Decoder\HMAC;
 
-final class HS384 extends HMAC implements Decoder
+final class HS384 extends HMAC
 {
     private const HASHING_ALGORITHM = 'sha384';
 

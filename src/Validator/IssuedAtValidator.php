@@ -15,10 +15,6 @@ final class IssuedAtValidator implements Validator
 
     public function validate(bool|int|string $value): bool
     {
-        if ($this->issuedAt !== $value) {
-            return false;
-        }
-
-        return true;
+        return $this->issuedAt === $value;
     }
 }

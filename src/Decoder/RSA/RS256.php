@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace JsonWebToken\Decoder\RSA;
 
-use JsonWebToken\Decoder\Decoder;
 use JsonWebToken\Decoder\RSA;
 
 use const OPENSSL_ALGO_SHA256;
 
-final class RS256 extends RSA implements Decoder
+final class RS256 extends RSA
 {
     private const HASHING_ALGORITHM = OPENSSL_ALGO_SHA256;
 

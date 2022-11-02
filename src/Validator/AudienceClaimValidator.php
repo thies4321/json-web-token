@@ -15,10 +15,6 @@ final class AudienceClaimValidator implements Validator
 
     public function validate(int|string|bool $value): bool
     {
-        if ($value !== $this->audience) {
-            return false;
-        }
-
-        return true;
+        return $value === $this->audience;
     }
 }

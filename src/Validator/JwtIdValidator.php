@@ -15,10 +15,6 @@ final class JwtIdValidator implements Validator
 
     public function validate(bool|int|string $value): bool
     {
-        if ($this->jwtId !== $value) {
-            return false;
-        }
-
-        return true;
+        return $this->jwtId === $value;
     }
 }

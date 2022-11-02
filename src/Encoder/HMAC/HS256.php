@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace JsonWebToken\Encoder\HMAC;
 
-use JsonWebToken\Encoder\Encoder;
 use JsonWebToken\Encoder\HMAC;
 
-final class HS256 extends HMAC implements Encoder
+final class HS256 extends HMAC
 {
     private const HASHING_ALGORITHM = 'sha256';
 

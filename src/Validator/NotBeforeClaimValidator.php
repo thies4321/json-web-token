@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace JsonWebToken\Validator;
 
 use DateTime;
+use Exception;
 
 use function sprintf;
 
@@ -19,6 +20,9 @@ final class NotBeforeClaimValidator implements Validator
         $this->allowedTimeDrift = $allowedTimeDrift;
     }
 
+    /**
+     * @throws Exception
+     */
     public function validate(int|string|bool $value): bool
     {
         if ($this->notBefore !== $value) {
@@ -28,10 +32,6 @@ final class NotBeforeClaimValidator implements Validator
         $now = new DateTime();
         $notBefore = new DateTime(sprintf('@%d', ($this->notBefore - $this->allowedTimeDrift)));
 
-        if ($now < $notBefore) {
-            return false;
-        }
-
-        return true;
+        return $now >= $notBefore;
     }
 }

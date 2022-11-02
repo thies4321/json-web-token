@@ -15,10 +15,6 @@ final class SubjectClaimValidator implements Validator
 
     public function validate(int|string|bool $value): bool
     {
-        if ($this->subject !== $value) {
-            return false;
-        }
-
-        return true;
+        return $this->subject === $value;
     }
 }

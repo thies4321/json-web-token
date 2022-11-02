@@ -35,10 +35,6 @@ final class ExpirationTimeClaimValidator implements Validator
         $now = new DateTime();
         $expirationTime = new DateTime(sprintf('@%d', ($this->expirationTime + $this->allowedTimeDrift)));
 
-        if ($now >= $expirationTime) {
-            return false;
-        }
-
-        return true;
+        return $now < $expirationTime;
     }
 }

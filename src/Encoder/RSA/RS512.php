@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace JsonWebToken\Encoder\RSA;
 
-use JsonWebToken\Encoder\Encoder;
 use JsonWebToken\Encoder\RSA;
 
 use const OPENSSL_ALGO_SHA512;
 
-final class RS512 extends RSA implements Encoder
+final class RS512 extends RSA
 {
     private const HASHING_ALGORITHM = OPENSSL_ALGO_SHA512;
 

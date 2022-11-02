@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace JsonWebToken;
 
+use JsonException;
 use JsonWebToken\Decoder\Decoder;
 use JsonWebToken\Encoder\Encoder;
 use JsonWebToken\Entity\DecodedToken;
@@ -21,6 +22,8 @@ use JsonWebToken\Validator\Validator;
 use function array_key_exists;
 use function explode;
 use function json_decode;
+
+use const JSON_THROW_ON_ERROR;
 
 final class JWT
 {
@@ -62,11 +65,12 @@ final class JWT
      * @throws AlgorithmNotSupported
      * @throws HeaderNotFoundException
      * @throws ValidatorNotFound
+     * @throws JsonException
      */
     public function decode(string $token, string $secret): DecodedToken
     {
         $tokenParts = explode('.', $token);
-        $header = json_decode(Base64UrlService::base64UrlDecode($tokenParts[0]), true);
+        $header = json_decode(Base64UrlService::base64UrlDecode($tokenParts[0]), true, 512, JSON_THROW_ON_ERROR);
         $algorithm = $header['alg'] ?? null;
 
         if ($algorithm === null) {
@@ -81,10 +85,11 @@ final class JWT
         $decodedToken = $decoder->decode();
 
         foreach (ClaimName::cases() as $claimName) {
-            if (array_key_exists($claimName->value, $decodedToken->getPayload())) {
-                if (! $this->validate($decodedToken, $claimName)) {
-                    $decodedToken->setValid(false);
-                }
+            if (
+                array_key_exists($claimName->value, $decodedToken->getPayload()) &&
+                ! $this->validate($decodedToken, $claimName)
+            ) {
+                $decodedToken->setValid(false);
             }
         }
 

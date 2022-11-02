@@ -15,10 +15,6 @@ final class IssuerClaimValidator implements Validator
 
     public function validate(int|string|bool $value): bool
     {
-        if ($this->issuer !== $value) {
-            return false;
-        }
-
-        return true;
+        return $this->issuer === $value;
     }
 }

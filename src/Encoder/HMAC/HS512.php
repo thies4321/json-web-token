@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace JsonWebToken\Encoder\HMAC;
 
-use JsonWebToken\Encoder\Encoder;
 use JsonWebToken\Encoder\HMAC;
 
-final class HS512 extends HMAC implements Encoder
+final class HS512 extends HMAC
 {
     private const HASHING_ALGORITHM = 'sha512';
 
