@@ -11,10 +11,15 @@ use JsonWebToken\Entity\EncodedToken;
 use JsonWebToken\Enum\ClaimName;
 use JsonWebToken\Exception\AlgorithmNotSupported;
 use JsonWebToken\Exception\HeaderNotFoundException;
+use JsonWebToken\Exception\ValidationFailedException;
+use JsonWebToken\Exception\ValidatorNotFound;
 use JsonWebToken\Mapping\DecoderMapping;
 use JsonWebToken\Mapping\EncoderMapping;
+use JsonWebToken\Mapping\ValidatorMapping;
 use JsonWebToken\Service\Base64UrlService;
+use JsonWebToken\Validator\Validator;
 
+use function array_key_exists;
 use function explode;
 use function json_decode;
 
@@ -22,18 +27,19 @@ final class JWT
 {
     private readonly EncoderMapping $encoderMapping;
     private readonly DecoderMapping $decoderMapping;
+    private readonly ValidatorMapping $validatorMapping;
 
-    public function __construct(?EncoderMapping $encoderMapping = null, ?DecoderMapping $decoderMapping = null)
-    {
+    public function __construct(
+        ?EncoderMapping $encoderMapping = null,
+        ?DecoderMapping $decoderMapping = null,
+        ?ValidatorMapping $validatorMapping = null
+    ) {
         $this->encoderMapping = $encoderMapping ?? new EncoderMapping();
         $this->decoderMapping = $decoderMapping ?? new DecoderMapping();
+        $this->validatorMapping = $validatorMapping ?? new ValidatorMapping();
     }
 
     /**
-     * @param array $header
-     * @param array $payload
-     * @param string $secret
-     * @return EncodedToken
      * @throws AlgorithmNotSupported
      * @throws HeaderNotFoundException
      */
@@ -53,6 +59,12 @@ final class JWT
         return $encoder->encode();
     }
 
+    /**
+     * @throws AlgorithmNotSupported
+     * @throws HeaderNotFoundException
+     * @throws ValidationFailedException
+     * @throws ValidatorNotFound
+     */
     public function decode(string $token, string $secret): DecodedToken
     {
         $tokenParts = explode('.', $token);
@@ -68,11 +80,30 @@ final class JWT
         /** @var Decoder $decoder */
         $decoder = new $decoderClass($tokenParts[0], $tokenParts[1], $tokenParts[2], $secret);
 
-        return $decoder->decode();
+        $decodedToken = $decoder->decode();
+
+        foreach (ClaimName::cases() as $claimName) {
+            if (array_key_exists($claimName->value, $decodedToken->getPayload())) {
+                if (! $this->validate($decodedToken, $claimName)) {
+                    throw ValidationFailedException::forClaim($claimName->value);
+                }
+            }
+        }
+
+        return $decodedToken;
     }
 
+    /**
+     * @throws ValidatorNotFound
+     */
     public function validate(DecodedToken $decodedToken, ClaimName $claimName): bool
     {
+        $validatorClass = $this->validatorMapping->get($claimName->value);
+        $claimValue = $decodedToken->getPayload()[$claimName->value] ?? null;
 
+        /** @var Validator $validator */
+        $validator = new $validatorClass($claimValue);
+
+        return $validator->validate($claimValue);
     }
 }

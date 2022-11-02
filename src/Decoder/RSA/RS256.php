@@ -6,6 +6,7 @@ namespace JsonWebToken\Decoder\RSA;
 
 use JsonWebToken\Decoder\Decoder;
 use JsonWebToken\Decoder\RSA;
+
 use const OPENSSL_ALGO_SHA256;
 
 final class RS256 extends RSA implements Decoder

@@ -13,8 +13,9 @@ require __DIR__ . '/../vendor/autoload.php';
 //$payload = [
 //    'sub' => '1234567890',
 //    'name' => 'John Doe',
-////    'admin' => true,
-//    'iat' => 1516239022
+//    'admin' => true,
+//    'iat' => 1516239022,
+//    'nbf' => 1667392244,
 //];
 //
 //$jwt = new \JsonWebToken\JWT();
@@ -23,8 +24,10 @@ require __DIR__ . '/../vendor/autoload.php';
 //echo $token;
 
 $jwt = new \JsonWebToken\JWT();
-$token = $jwt->decode('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', 'your-256-bit-secret');
+$token = $jwt->decode('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMiwibmJmIjoxNjY3MzkyMjQ0fQ.iAlyxPxLV72WIQ2_OaEFkJENRmkrsnmcUO4FoQks5SM', 'your-256-bit-secret');
 
-print_r($token);
+print_r($token->getPayload()['admin']);
+
+$jwt->validate($token, \JsonWebToken\Enum\ClaimName::Audience);
 
 echo PHP_EOL;

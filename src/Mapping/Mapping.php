@@ -8,5 +8,5 @@ interface Mapping
 {
     public function supports(string $value): bool;
 
-    public function get(string $value): mixed;
+    public function get(string $value): string;
 }

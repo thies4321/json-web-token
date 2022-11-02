@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace JsonWebToken\Encoder;
 
 use JsonWebToken\Entity\EncodedToken;
+use JsonWebToken\Service\Base64UrlService;
+
 use function hash_hmac;
 use function json_encode;
 use function sprintf;
 
-abstract class HMAC extends AbstractEncoder implements Encoder
+abstract class HMAC implements Encoder
 {
     private readonly array $header;
     private readonly array $payload;
@@ -26,9 +28,9 @@ abstract class HMAC extends AbstractEncoder implements Encoder
 
     public function encode(): EncodedToken
     {
-        $header = $this->base64UrlEncode(json_encode($this->header));
-        $payload = $this->base64UrlEncode(json_encode($this->payload));
-        $signature = $this->base64UrlEncode(
+        $header = Base64UrlService::base64UrlEncode(json_encode($this->header));
+        $payload = Base64UrlService::base64UrlEncode(json_encode($this->payload));
+        $signature = Base64UrlService::base64UrlEncode(
             hash_hmac(
                 $this->hashingAlgorithm,
                 sprintf('%s.%s', $header, $payload),

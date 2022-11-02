@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace JsonWebToken\Encoder;
 
 use JsonWebToken\Entity\EncodedToken;
+use JsonWebToken\Service\Base64UrlService;
 
 use function json_encode;
 use function openssl_sign;
 use function sprintf;
 
-abstract class RSA extends AbstractEncoder implements Encoder
+abstract class RSA implements Encoder
 {
     private readonly array $header;
     private readonly array $payload;
@@ -27,8 +28,8 @@ abstract class RSA extends AbstractEncoder implements Encoder
 
     public function encode(): EncodedToken
     {
-        $header = $this->base64UrlEncode(json_encode($this->header));
-        $payload = $this->base64UrlEncode(json_encode($this->payload));
+        $header = Base64UrlService::base64UrlEncode(json_encode($this->header));
+        $payload = Base64UrlService::base64UrlEncode(json_encode($this->payload));
 
         openssl_sign(
             sprintf('%s.%s', $header, $payload),
@@ -37,6 +38,6 @@ abstract class RSA extends AbstractEncoder implements Encoder
             $this->hashingAlgorithm
         );
 
-        return new EncodedToken($header, $payload, $this->base64UrlEncode($signature));
+        return new EncodedToken($header, $payload, Base64UrlService::base64UrlEncode($signature));
     }
 }
