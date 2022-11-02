@@ -37,6 +37,7 @@ final class DecodeToken extends AbstractCommand
             return self::FAILURE;
         }
 
+        $output->writeln(sprintf('<comment>Token valid: %s</comment>', $decodedToken->isValid() ? 'Yes' : 'No'));
         $output->writeln('Headers:');
 
         $table = new Table($output);
@@ -52,8 +53,6 @@ final class DecodeToken extends AbstractCommand
             $table->addRow([$payloadType, $payloadValue]);
         }
         $table->render();
-
-        $output->writeln(sprintf('Token valid: %s', $decodedToken->isValid() ? 'Yes' : 'No'));
 
         return self::SUCCESS;
     }
