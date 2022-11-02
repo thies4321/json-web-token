@@ -5,21 +5,26 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
-$header = [
-    'alg' => 'HS256',
-    'typ' => 'JWT'
-];
-
-$payload = [
-    'sub' => '1234567890',
-    'name' => 'John Doe',
-//    'admin' => true,
-    'iat' => 1516239022
-];
+//$header = [
+//    'alg' => 'HS256',
+//    'typ' => 'JWT'
+//];
+//
+//$payload = [
+//    'sub' => '1234567890',
+//    'name' => 'John Doe',
+////    'admin' => true,
+//    'iat' => 1516239022
+//];
+//
+//$jwt = new \JsonWebToken\JWT();
+//$token = $jwt->encode($header, $payload, 'your-256-bit-secret');
+//
+//echo $token;
 
 $jwt = new \JsonWebToken\JWT();
-$token = $jwt->encode($header, $payload, 'your-256-bit-secret');
+$token = $jwt->decode('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c', 'your-256-bit-secret');
 
-echo $token;
+print_r($token);
 
 echo PHP_EOL;

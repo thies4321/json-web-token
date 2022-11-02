@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace JsonWebToken\Mapping;
 
-use JsonWebToken\Encoder\HMAC\HS256;
-use JsonWebToken\Encoder\HMAC\HS384;
-use JsonWebToken\Encoder\HMAC\HS512;
-use JsonWebToken\Encoder\RSA\RS256;
-use JsonWebToken\Encoder\RSA\RS384;
-use JsonWebToken\Encoder\RSA\RS512;
+use JsonWebToken\Decoder\HMAC\HS256;
+use JsonWebToken\Decoder\HMAC\HS384;
+use JsonWebToken\Decoder\HMAC\HS512;
+use JsonWebToken\Decoder\RSA\RS256;
+use JsonWebToken\Decoder\RSA\RS384;
+use JsonWebToken\Decoder\RSA\RS512;
 use JsonWebToken\Enum\SigningAlgorithm;
 use JsonWebToken\Exception\AlgorithmNotSupported;
-
 use function array_key_exists;
 
-final class EncoderMapping implements Mapping
+final class DecoderMapping implements Mapping
 {
     private readonly array $supportedAlgorithms;
 
@@ -42,7 +41,7 @@ final class EncoderMapping implements Mapping
     public function get(string $value): string
     {
         if (! $this->supports($value)) {
-            throw AlgorithmNotSupported::forEncoder($value);
+            throw AlgorithmNotSupported::forDecoder($value);
         }
 
         return $this->supportedAlgorithms[$value];
