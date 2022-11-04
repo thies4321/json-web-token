@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace JsonWebToken\Command;
 
+use JsonException;
+use JsonWebToken\Exception\AlgorithmNotSupported;
+use JsonWebToken\Exception\HeaderNotFoundException;
 use JsonWebToken\Exception\InvalidSignatureException;
+use JsonWebToken\Exception\ValidatorNotFound;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputArgument;
@@ -25,7 +29,13 @@ final class DecodeToken extends AbstractCommand
         $this->addArgument('secret', InputArgument::REQUIRED, 'Passphrase/key to encode with');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    /**
+     * @throws AlgorithmNotSupported
+     * @throws HeaderNotFoundException
+     * @throws JsonException
+     * @throws ValidatorNotFound
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $token = $input->getArgument('token');
         $secret = $input->getArgument('secret');

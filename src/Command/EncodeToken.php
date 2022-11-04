@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace JsonWebToken\Command;
 
 use JsonException;
+use JsonWebToken\Exception\AlgorithmNotSupported;
+use JsonWebToken\Exception\HeaderNotFoundException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function json_decode;
-
 use function sprintf;
+
 use const JSON_THROW_ON_ERROR;
 
 #[AsCommand(
@@ -28,6 +30,10 @@ final class EncodeToken extends AbstractCommand
         $this->addArgument('secret', InputArgument::REQUIRED, 'Passphrase/key to encode with');
     }
 
+    /**
+     * @throws AlgorithmNotSupported
+     * @throws HeaderNotFoundException
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $encodedHeader = $input->getArgument('header');
