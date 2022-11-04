@@ -11,7 +11,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "JsonWebToken\\": "tests/"
+            "JsonWebToken\\Tests\\": "tests/"
         }
     },
     "bin": ["bin/json-web-token"],
