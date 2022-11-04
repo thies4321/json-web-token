@@ -56,7 +56,7 @@ final class HS256Test extends TestCase
                     'name' => 'John Doe',
                     'iat' => 1516239022,
                     'admin' => true,
-                ]
+                ],
             ]
         ];
     }

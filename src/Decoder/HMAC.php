@@ -23,8 +23,13 @@ abstract class HMAC implements Decoder
     private readonly string $secret;
     private readonly string $hashingAlgorithm;
 
-    public function __construct(string $header, string $payload, string $signature, string $secret, string $hashingAlgorithm)
-    {
+    public function __construct(
+        string $header,
+        string $payload,
+        string $signature,
+        string $secret,
+        string $hashingAlgorithm
+    ) {
         $this->header = $header;
         $this->payload = $payload;
         $this->signature = $signature;

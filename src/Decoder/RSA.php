@@ -23,8 +23,13 @@ abstract class RSA implements Decoder
     private readonly string $secret;
     private readonly int $hashingAlgorithm;
 
-    public function __construct(string $header, string $payload, string $signature, string $secret, int $hashingAlgorithm)
-    {
+    public function __construct(
+        string $header,
+        string $payload,
+        string $signature,
+        string $secret,
+        int $hashingAlgorithm
+    ) {
         $this->header = $header;
         $this->payload = $payload;
         $this->signature = $signature;
