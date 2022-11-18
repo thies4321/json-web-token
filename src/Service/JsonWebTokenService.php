@@ -101,15 +101,20 @@ final class JsonWebTokenService
     public function validate(DecodedToken $decodedToken, ClaimName $claimName, int|string|bool|null $expectedClaimValue = null): bool
     {
         $validatorClass = $this->validatorMapping->get($claimName->value);
-        $claimValue = $expectedClaimValue ?? $decodedToken->getPayload()[$claimName->value] ?? null;
 
-        if ($claimValue === null) {
+        $providedClaimValue = $decodedToken->getPayload()[$claimName->value] ?? null;
+
+        if ($providedClaimValue === null) {
             return false;
         }
 
-        /** @var Validator $validator */
-        $validator = new $validatorClass($claimValue);
+        if ($expectedClaimValue === null) {
+            $expectedClaimValue = $providedClaimValue;
+        }
 
-        return $validator->validate($claimValue);
+        /** @var Validator $validator */
+        $validator = new $validatorClass($providedClaimValue);
+
+        return $validator->validate($expectedClaimValue);
     }
 }

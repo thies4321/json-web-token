@@ -40,8 +40,8 @@ final class JWT
     /**
      * @throws ValidatorNotFound
      */
-    public static function validate(DecodedToken $decodedToken, ClaimName $claimName): bool
+    public static function validate(DecodedToken $decodedToken, ClaimName $claimName, int|string|bool $expectedClaimValue): bool
     {
-        return (new JsonWebTokenService())->validate($decodedToken, $claimName);
+        return (new JsonWebTokenService())->validate($decodedToken, $claimName, $expectedClaimValue);
     }
 }
