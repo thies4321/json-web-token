@@ -15,6 +15,8 @@ use JsonWebToken\Service\JsonWebTokenService;
 
 final class JWT
 {
+    public const VERSION = '1.0';
+
     /**
      * @throws AlgorithmNotSupported
      * @throws HeaderNotFoundException

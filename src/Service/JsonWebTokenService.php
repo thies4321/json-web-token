@@ -88,7 +88,7 @@ final class JsonWebTokenService
                 array_key_exists($claimName->value, $decodedToken->getPayload()) &&
                 ! $this->validate($decodedToken, $claimName)
             ) {
-                $decodedToken->setValid(false);
+                $decodedToken = new DecodedToken($decodedToken->getHeader(), $decodedToken->getPayload(), false);
             }
         }
 
@@ -98,10 +98,10 @@ final class JsonWebTokenService
     /**
      * @throws ValidatorNotFound
      */
-    public function validate(DecodedToken $decodedToken, ClaimName $claimName): bool
+    public function validate(DecodedToken $decodedToken, ClaimName $claimName, int|string|bool|null $expectedClaimValue = null): bool
     {
         $validatorClass = $this->validatorMapping->get($claimName->value);
-        $claimValue = $decodedToken->getPayload()[$claimName->value] ?? null;
+        $claimValue = $expectedClaimValue ?? $decodedToken->getPayload()[$claimName->value] ?? null;
 
         if ($claimValue === null) {
             return false;

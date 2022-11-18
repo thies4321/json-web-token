@@ -8,13 +8,13 @@ final class DecodedToken
 {
     private readonly array $header;
     private readonly array $payload;
-    private bool $valid;
+    private readonly bool $valid;
 
-    public function __construct(array $header, array $payload)
+    public function __construct(array $header, array $payload, bool $valid = true)
     {
         $this->header = $header;
         $this->payload = $payload;
-        $this->valid = true;
+        $this->valid = $valid;
     }
 
     public function getHeader(): array
@@ -30,10 +30,5 @@ final class DecodedToken
     public function isValid(): bool
     {
         return $this->valid;
-    }
-
-    public function setValid(bool $valid): void
-    {
-        $this->valid = $valid;
     }
 }
