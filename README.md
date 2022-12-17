@@ -1,6 +1,11 @@
 # json-web-token
 JSON Web Token library written in PHP
 
+## Installation
+```
+composer require thies/json-web-token
+```
+
 ## Usage
 ### Encoding
 ```php
