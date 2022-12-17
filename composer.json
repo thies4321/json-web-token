@@ -1,9 +1,17 @@
 {
     "name": "thies/json-web-token",
-    "type": "standard",
+    "type": "library",
     "description": "JSON Web Token library written in PHP",
+    "keywords": ["JWT", "Token"],
     "homepage": "https://github.com/thies4321/json-web-token",
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Thies Verhave",
+            "homepage": "https://verhave.net/",
+            "role": "Developer"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "JsonWebToken\\": "src/"
