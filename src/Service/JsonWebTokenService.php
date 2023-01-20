@@ -86,7 +86,7 @@ final class JsonWebTokenService
         foreach (ClaimName::cases() as $claimName) {
             if (
                 array_key_exists($claimName->value, $decodedToken->getPayload()) &&
-                ! $this->validate($decodedToken, $claimName)
+                ! $this->validate($decodedToken, $claimName, $decodedToken->getPayload()[$claimName->value])
             ) {
                 $decodedToken = new DecodedToken($decodedToken->getHeader(), $decodedToken->getPayload(), false);
             }
@@ -98,7 +98,7 @@ final class JsonWebTokenService
     /**
      * @throws ValidatorNotFound
      */
-    public function validate(DecodedToken $decodedToken, ClaimName $claimName, int|string|bool|null $expectedClaimValue = null): bool
+    public function validate(DecodedToken $decodedToken, ClaimName $claimName, int|string|bool|null $expectedClaimValue): bool
     {
         $validatorClass = $this->validatorMapping->get($claimName->value);
 
@@ -106,10 +106,6 @@ final class JsonWebTokenService
 
         if ($providedClaimValue === null) {
             return false;
-        }
-
-        if ($expectedClaimValue === null) {
-            $expectedClaimValue = $providedClaimValue;
         }
 
         /** @var Validator $validator */
